@@ -86,6 +86,7 @@ export function HeroSection() {
             x: () => Math.max(0, visual.clientWidth / 2 - 76 - image.offsetWidth / 2),
             scale: 0.94,
           }, 0)
+          .to(visual, { backgroundPosition: "18px 0px" }, 0)
           .to(copy, { autoAlpha: 1, x: 0 }, 0.27)
           .to(".hero-title-layer-top", { yPercent: -65, autoAlpha: 0 }, 0)
           .to(".hero-title-layer-mid", { yPercent: -45, autoAlpha: 0, duration: 0.24 }, 0)
@@ -106,12 +107,12 @@ export function HeroSection() {
           <div className="hero-badge">
             <span className="dot" /> OPEN TO BUILDING
           </div>
-          <div className="hero-badge right-badge">03 / 26 • NEW DELHI, INDIA</div>
+          <div className="hero-badge right-badge"> • NEW DELHI, INDIA</div>
 
           <img
             className="hero-uploaded-image"
-            src="/pic.png"
-            alt="Pixel-art portrait in a retro preview window"
+            src="/bw.png"
+            alt="Grayscale pixel-art portrait of Khushi Bhaskar"
           />
         </div>
 

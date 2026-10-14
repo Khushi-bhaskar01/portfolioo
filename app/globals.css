@@ -1235,8 +1235,7 @@ main {
 html { background: var(--bg); }
 
 body {
-  background: linear-gradient(rgba(23, 25, 27, 0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(23, 25, 27, 0.035) 1px, transparent 1px), var(--bg);
-  background-size: 34px 34px;
+  background: var(--bg);
   color: var(--text);
   font-family: var(--sans);
 }
@@ -1552,5 +1551,294 @@ body {
 
   .hero-portrait-stage {
     width: min(460px, 72vw, 62svh);
+  }
+}
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 42px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background-color 0.35s ease, color 0.35s ease;
+}
+
+.theme-toggle:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.theme-toggle-indicator {
+  width: 9px;
+  height: 9px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  box-shadow: inset 4px 0 0 currentColor;
+}
+
+html,
+body,
+.topbar,
+.hero-visual-wrap {
+  transition: background-color 0.35s ease, color 0.35s ease;
+}
+
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #111713;
+  --bg-soft: #1a221d;
+  --panel: #202923;
+  --panel-strong: #26312a;
+  --text: #e9eee8;
+  --soft: #b9c5bc;
+  --muted: #84938a;
+  --line: rgba(215, 233, 219, 0.14);
+  --accent: #83cbb2;
+  --accent-soft: rgba(131, 203, 178, 0.12);
+  --terminal: #9dcba6;
+}
+
+html[data-theme="dark"] .topbar {
+  background: rgba(17, 23, 19, 0.88);
+}
+
+html[data-theme="dark"] .connect-button,
+html[data-theme="dark"] .primary-action,
+html[data-theme="dark"] .secondary-action,
+html[data-theme="dark"] .contact-actions a {
+  border-color: var(--line);
+}
+
+html[data-theme="dark"] .hero-visual-wrap {
+  background-image:
+    linear-gradient(rgba(215, 233, 219, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(215, 233, 219, 0.035) 1px, transparent 1px);
+}
+
+html[data-theme="dark"] .hero-title-layer-top,
+html[data-theme="dark"] .hero-title-layer-bottom {
+  color: rgba(233, 238, 232, 0.22);
+  mix-blend-mode: normal;
+}
+
+html[data-theme="dark"] .hero-title-layer-mid {
+  color: rgba(131, 203, 178, 0.48);
+}
+
+html[data-theme="dark"] .hero-badge {
+  background: rgba(17, 23, 19, 0.82);
+}
+
+html[data-theme="dark"] .status-panel,
+html[data-theme="dark"] .tech-tags span,
+html[data-theme="dark"] .stack-group li {
+  background: rgba(255, 255, 255, 0.035);
+}
+
+@media (max-width: 640px) {
+  .theme-toggle {
+    margin-left: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html,
+  body,
+  .topbar,
+  .hero-visual-wrap,
+  .theme-toggle {
+    transition-duration: 0.01ms;
+  }
+}
+
+.scroll-grid {
+  --grid-x: 0px;
+  --grid-line: rgba(23, 25, 27, 0.035);
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 34px 34px;
+  background-position: 0 0, var(--grid-x) 0;
+}
+
+.scroll-ornament {
+  position: absolute;
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  color: var(--accent);
+  opacity: 0.42;
+  will-change: transform;
+}
+
+.ornament-left {
+  left: max(28px, calc((100vw - 1320px) / 2 - 72px));
+}
+
+.ornament-right {
+  right: max(28px, calc((100vw - 1320px) / 2 - 72px));
+}
+
+.ornament-upper {
+  top: 24vh;
+}
+
+.ornament-lower {
+  top: 68vh;
+}
+
+.doodle {
+  position: relative;
+  display: block;
+  width: 32px;
+  height: 32px;
+  color: currentColor;
+}
+
+.doodle-sparkle::before,
+.doodle-sparkle::after {
+  position: absolute;
+  top: 4px;
+  left: 15px;
+  width: 2px;
+  height: 24px;
+  border-radius: 2px;
+  background: currentColor;
+  content: "";
+}
+
+.doodle-sparkle::after {
+  transform: rotate(90deg);
+}
+
+.doodle-sparkle i {
+  position: absolute;
+  top: 3px;
+  right: 1px;
+  width: 5px;
+  height: 5px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+}
+
+.doodle-orbit {
+  width: 24px;
+  height: 24px;
+  margin: 4px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+}
+
+.doodle-orbit::before {
+  position: absolute;
+  inset: 5px -7px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  content: "";
+  transform: rotate(-32deg);
+}
+
+.doodle-orbit i {
+  position: absolute;
+  top: -3px;
+  right: -5px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.doodle-flower i {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border: 1px solid currentColor;
+  border-radius: 50% 50% 2px 50%;
+}
+
+.doodle-flower i:nth-child(1) { top: 1px; left: 11px; }
+.doodle-flower i:nth-child(2) { top: 8px; left: 18px; transform: rotate(72deg); }
+.doodle-flower i:nth-child(3) { top: 17px; left: 14px; transform: rotate(144deg); }
+.doodle-flower i:nth-child(4) { top: 16px; left: 5px; transform: rotate(216deg); }
+.doodle-flower i:nth-child(5) { top: 7px; left: 3px; transform: rotate(288deg); }
+
+.doodle-flower::after {
+  position: absolute;
+  top: 13px;
+  left: 13px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+  content: "";
+}
+
+.pixel-cluster {
+  display: grid;
+  grid-template-columns: repeat(3, 5px);
+  grid-template-rows: repeat(2, 5px);
+  gap: 3px;
+  animation: pixel-drift 4.8s ease-in-out infinite alternate;
+}
+
+.pixel-cluster i {
+  width: 5px;
+  height: 5px;
+  background: currentColor;
+  opacity: 0.48;
+}
+
+.pixel-cluster i:nth-child(2),
+.pixel-cluster i:nth-child(5) {
+  opacity: 0.18;
+}
+
+.pixel-cluster-b,
+.pixel-cluster-d {
+  animation-delay: -2.4s;
+}
+
+@keyframes pixel-drift {
+  from { transform: translateY(-4px); }
+  to { transform: translateY(5px); }
+}
+
+.portfolio-shell {
+  position: relative;
+  z-index: 1;
+}
+
+.doodle-github svg {
+  display: block;
+  width: 32px;
+  height: 32px;
+  fill: currentColor;
+}
+
+html[data-theme="dark"] .scroll-grid {
+  --grid-line: rgba(215, 233, 219, 0.035);
+}
+
+@media (max-width: 1100px) {
+  .scroll-ornament {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pixel-cluster {
+    animation: none;
   }
 }
