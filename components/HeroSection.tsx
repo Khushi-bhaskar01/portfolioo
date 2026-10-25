@@ -1,8 +1,9 @@
 "use client";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
+import { ASSEMBLED, FRAME_COUNT, getHeroFrames } from "./heroFrames";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -16,13 +17,43 @@ const Chars = ({ text }: { text: string }) => (
   </>
 );
 
-export function HeroSection() {
+// Frames 0-49 assemble the portrait, 50-89 turn it in 3D and settle back flat.
+export function HeroSection({ ready }: { ready: boolean }) {
   const root = useRef<HTMLElement>(null);
+  const introRef = useRef<gsap.core.Timeline | null>(null);
+
+  // The intro waits behind the loader and plays as the loader dissolves.
+  useEffect(() => {
+    if (ready) introRef.current?.play();
+  }, [ready]);
 
   useGSAP(
     () => {
+      // ---------- FRAME SEQUENCE ----------
+      const canvas = root.current?.querySelector<HTMLCanvasElement>(".hero-frames canvas");
+      const context = canvas?.getContext("2d");
+      const sequence = { intro: 0, orbit: 0 };
+      const frames = getHeroFrames();
+
+      const render = () => {
+        if (!canvas || !context) return;
+        const index = sequence.intro < ASSEMBLED
+          ? Math.round(sequence.intro)
+          : ASSEMBLED + Math.round(sequence.orbit);
+        const frame = frames[index];
+        if (!frame.complete || !frame.naturalWidth) return;
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        context.drawImage(frame, 0, 0, canvas.width, canvas.height);
+      };
+      frames.forEach((frame) => frame.addEventListener("load", render, { once: true }));
+
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (reduceMotion) sequence.intro = ASSEMBLED;
+      render();
+
       // ---------- INTRO ----------
-      const intro = gsap.timeline({ defaults: { ease: "power4.out" } });
+      const intro = gsap.timeline({ paused: true, defaults: { ease: "power4.out" } });
+      introRef.current = intro;
 
       intro
         .from(".hero-title-layer .char", {
@@ -34,12 +65,17 @@ export function HeroSection() {
           duration: 1.2,
           stagger: 0.05,
         })
-        .from(
-          ".hero-uploaded-image",
-          { scale: 0.6, y: 100, autoAlpha: 0, duration: 1, ease: "back.out(1.6)" },
-          "-=0.9"
+        .to(
+          sequence,
+          {
+            intro: ASSEMBLED,
+            duration: reduceMotion ? 0 : 2.2,
+            ease: "power2.out",
+            onUpdate: render,
+          },
+          0.15
         )
-        .from(".hero-badge", { y: -20, autoAlpha: 0, stagger: 0.15, duration: 0.8 }, "-=0.4")
+        .from(".hero-badge", { y: -20, autoAlpha: 0, stagger: 0.15, duration: 0.8 }, 1.6)
         .from(".status-line", { x: -20, autoAlpha: 0, stagger: 0.25, duration: 0.5 }, "-=0.4");
 
       const media = gsap.matchMedia();
@@ -63,7 +99,7 @@ export function HeroSection() {
       });
 
       media.add("(min-width: 801px)", () => {
-        const image = root.current?.querySelector<HTMLImageElement>(".hero-uploaded-image");
+        const image = root.current?.querySelector<HTMLElement>(".hero-uploaded-image");
         const copy = root.current?.querySelector<HTMLElement>(".hero-copy");
         const visual = root.current?.querySelector<HTMLElement>(".hero-visual-wrap");
         if (!image || !copy || !visual) return;
@@ -87,6 +123,7 @@ export function HeroSection() {
             scale: 0.94,
           }, 0)
           .to(visual, { backgroundPosition: "18px 0px" }, 0)
+          .to(sequence, { orbit: FRAME_COUNT - 1 - ASSEMBLED, onUpdate: render }, 0)
           .to(copy, { autoAlpha: 1, x: 0 }, 0.27)
           .to(".hero-title-layer-top", { yPercent: -65, autoAlpha: 0 }, 0)
           .to(".hero-title-layer-mid", { yPercent: -45, autoAlpha: 0, duration: 0.24 }, 0)
@@ -109,11 +146,13 @@ export function HeroSection() {
           </div>
           <div className="hero-badge right-badge"> • NEW DELHI, INDIA</div>
 
-          <img
-            className="hero-uploaded-image"
-            src="/bw.png"
-            alt="Grayscale pixel-art portrait of Khushi Bhaskar"
-          />
+          <div
+            className="hero-uploaded-image hero-frames"
+            role="img"
+            aria-label="Grayscale pixel-art portrait of Khushi Bhaskar"
+          >
+            <canvas width={800} height={800} />
+          </div>
         </div>
 
         <div className="hero-title-layer hero-title-layer-bottom"><Chars text="THAT THINK." /></div>

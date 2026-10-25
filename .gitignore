@@ -1,2 +1,40 @@
-\node_modules
-\.next
+# dependencies
+node_modules/
+.pnp
+.pnp.js
+.yarn/
+
+# Next.js build output
+.next/
+out/
+build/
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# env files (keep secrets out of git)
+.env
+.env*.local
+
+# Vercel
+.vercel
+
+# logs & debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Python (scripts/make-hero-frames.py)
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp

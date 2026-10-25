@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, IBM_Plex_Mono, Manrope } from "next/font/google";
+import { Cormorant_Garamond, IBM_Plex_Mono, Manrope, VT323 } from "next/font/google";
 import { SmoothScroll } from "../components/SmoothScroll";
 import "./globals.css";
+import "./minecraft.css";
 
 const display = Cormorant_Garamond({
   weight: ["500", "600", "700"],
@@ -24,13 +25,21 @@ const mono = IBM_Plex_Mono({
   display: "swap",
 });
 
+// Pixel face for small labels only (kickers, numbers, tooltips); headings and body keep the editorial fonts.
+const pixel = VT323({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-pixel",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: "Khushi Bhaskar — Software Developer",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${display.variable} ${sans.variable} ${mono.variable}`}>
+    <html lang="en" className={`${display.variable} ${sans.variable} ${mono.variable} ${pixel.variable}`}>
       <body>
         <SmoothScroll>{children}</SmoothScroll>
       </body>

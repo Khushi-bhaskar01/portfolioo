@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
+import { Loader } from "../components/Loader";
 import { Header } from "../components/Header";
 import { MenuOverlay } from "../components/MenuOverlay";
 import { HeroSection } from "../components/HeroSection";
@@ -14,6 +15,7 @@ import { ResearchSection } from "../components/ResearchSection";
 import { SkillsSection } from "../components/SkillsSection";
 import { LeadershipSection } from "../components/LeadershipSection";
 import { ContactSection } from "../components/ContactSection";
+import { PixelWipe } from "../components/PixelWipe";
 import { FooterSection } from "../components/FooterSection";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -22,10 +24,10 @@ const projects: Project[] = [
   {
     number: "01",
     kind: "PERSONAL DASHBOARD / PRODUCTIVITY",
-    title: "For Myself",
-    text: "A personal dashboard for journals, to-do lists, and everyday planning, with a Windows wrapper built using Tauri.",
+    title: "Hawk",
+    text: "Journals, tasks and daily planning in one dashboard, shipped for Windows with Tauri.",
     stack: "JOURNALING / TASKS / DASHBOARD",
-    tone: "theme-1",
+    color: "#2c4a78",
     image: "/hawk.png",
     href: "https://for-myself-nine.vercel.app/login",
   },
@@ -33,9 +35,9 @@ const projects: Project[] = [
     number: "02",
     kind: "EDTECH / FULL STACK",
     title: "LearnCSWithArshi",
-    text: "A learning platform for computer science education with structured pathways, secure access, and product-led experience design.",
+    text: "A CS learning platform with structured paths, secure access and payments.",
     stack: "NEXT.JS / FIREBASE / RAZORPAY",
-    tone: "theme-2",
+    color: "#c9a14e",
     image: "/cs.png",
     href: "https://learncswitharshi.com/",
   },
@@ -43,9 +45,9 @@ const projects: Project[] = [
     number: "03",
     kind: "PUBLIC INTEREST / WEBSITE",
     title: "Policy Perspective Foundation",
-    text: "The Policy Perspective Foundation website, built by me for a public-interest organization.",
+    text: "Website for a public-interest policy foundation.",
     stack: "FOUNDATION / PUBLIC INTEREST / WEBSITE",
-    tone: "theme-3",
+    color: "#b8694e",
     image: "/ppf.png",
     href: "https://www.ppf.org.in/",
   },
@@ -53,33 +55,32 @@ const projects: Project[] = [
     number: "04",
     kind: "COMMUNITY / WEBSITE",
     title: "DevSource Portfolio",
-    text: "A portfolio website created by DevSource members.",
+    text: "Portfolio site for the DevSource developer community.",
     stack: "DEVSOURCE / COMMUNITY / PORTFOLIO",
-    tone: "theme-4",
+    color: "#3a8a76",
     image: "/dev.png",
     href: "https://dev-source-portfolio.vercel.app/",
   },
 ];
 
 const knowledgeAreas = [
-  { title: "LANGUAGES", items: ["C++", "Python", "JavaScript", "TypeScript", "SQL"] },
-  { title: "FRONTEND", items: ["React", "Next.js", "Tailwind CSS", "GSAP", "UI Systems"] },
-  { title: "BACKEND", items: ["Node.js", "Express", "REST APIs", "WebSockets", "System Design"] },
-  { title: "AI / ML", items: ["NLP", "Transformers", "Hugging Face", "LLM APIs", "Research"] },
-  { title: "DATABASE", items: ["MongoDB", "PostgreSQL", "Supabase", "Firebase", "Data Modelling"] },
-  { title: "INFRA", items: ["Docker", "AWS", "Git", "GitHub", "CI / CD"] },
+  { title: "LANGUAGES", icon: "book" as const, items: ["C++", "Python", "JavaScript", "TypeScript", "SQL"] },
+  { title: "FRONTEND", icon: "diamond" as const, items: ["React", "Next.js", "Tailwind CSS", "GSAP", "UI Systems"] },
+  { title: "BACKEND", icon: "chest" as const, items: ["Node.js", "Express", "REST APIs", "WebSockets", "System Design"] },
+  { title: "AI / ML", icon: "star" as const, items: ["NLP", "Transformers", "Hugging Face", "LLM APIs", "Research"] },
+  { title: "DATABASE", icon: "emerald" as const, items: ["MongoDB", "PostgreSQL", "Supabase", "Firebase", "Data Modelling"] },
+  { title: "INFRA", icon: "pickaxe" as const, items: ["Docker", "AWS", "Git", "GitHub", "CI / CD"] },
 ];
 
 const achievements = [
-  { number: "03", label: "BUILDSprint", detail: "3rd place" },
-  { number: "02", label: "PLASTIC HACKATHON", detail: "2nd place" },
-  { number: "21", label: "AI MANTHAN", detail: "Top 21" },
-  { number: "04", label: "TERRAVISION", detail: "4th place" },
+  { title: "BuildSprint", detail: "3rd place", icon: "gold" as const },
+  { title: "Plastic Hackathon", detail: "2nd place", icon: "diamond" as const },
+  { title: "AI Manthan", detail: "Top 21", icon: "star" as const },
+  { title: "TerraVision", detail: "4th place", icon: "emerald" as const },
 ];
 
 export default function Home() {
-  const [loading, setLoading] = useState(true);
-  const [progress, setProgress] = useState(0);
+  const [ready, setReady] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -99,39 +100,25 @@ export default function Home() {
       });
     });
 
-    const progressTimer = window.setInterval(() => {
-      setProgress((value) => Math.min(value + 2, 100));
-    }, 28);
-
-    const timer = window.setTimeout(() => setLoading(false), 1500);
-
-    return () => {
-      window.clearInterval(progressTimer);
-      window.clearTimeout(timer);
-      context.revert();
-    };
+    return () => context.revert();
   }, []);
 
   return (
     <>
-      <div className={loading ? "loader" : "loader loader-done"}>
-        <div className="loader-wrap">
-          <span>BOOTING PORTFOLIO</span>
-          <strong>{String(progress).padStart(2, "0")}%</strong>
-        </div>
-      </div>
+      <Loader onDone={() => setReady(true)} />
       <div className="portfolio-shell">
         <Header onMenuOpen={() => setMenuOpen(true)} />
         <MenuOverlay open={menuOpen} onClose={() => setMenuOpen(false)} />
 
         <main>
-          <HeroSection />
+          <HeroSection ready={ready} />
+          <PixelWipe />
           <WorkSection projects={projects} />
           <AboutSection />
           <ExperienceSection />
           <ResearchSection />
           <SkillsSection knowledgeAreas={knowledgeAreas} />
-          <LeadershipSection />
+          <LeadershipSection achievements={achievements} />
           <ContactSection />
         </main>
 

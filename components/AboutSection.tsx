@@ -1,31 +1,39 @@
+import { ItemSlot } from "./mc/ItemSlot";
+import { PixelIcon, type PixelIconName } from "./mc/PixelIcon";
+
+const focus: { label: string; icon: PixelIconName }[] = [
+  { label: "FULL-STACK", icon: "pickaxe" },
+  { label: "AI / ML", icon: "book" },
+  { label: "BACKEND", icon: "chest" },
+  { label: "PRODUCT", icon: "compass" },
+];
+
 export function AboutSection() {
   return (
-    <section id="about" className="about editorial-block reveal">
-      <div className="section-kicker">ABOUT / 01</div>
+    <section id="about" className="about section-stack reveal">
+      <div className="section-kicker">ABOUT / 02</div>
 
-      <div className="about-grid">
-        <div className="about-quote">
-          <p>"I don&apos;t just build interfaces.</p>
-          <p>I build the systems behind them."</p>
-        </div>
+      <div className="about-layout">
+        <blockquote className="about-quote-mc">
+          I don&apos;t just build interfaces. I build the systems behind them.
+        </blockquote>
 
-        <div className="about-body">
-          <p>
-            I&apos;m a third-year B.Tech CSE (Artificial Intelligence) student from USICT / GGSIPU,
-            building full-stack products, AI-powered workflows, and practical systems that solve real-world problems.
+        <div className="about-side">
+          <p className="about-line">
+            B.Tech CSE (AI) at USICT, GGSIPU — building full-stack products and AI workflows.
           </p>
-          <p>
-            My work sits at the intersection of backend engineering, intelligent interfaces, and developer tools —
-            with a focus on APIs, real-time systems, and thoughtful product execution.
-          </p>
-        </div>
-      </div>
 
-      <div className="meta-row">
-        <div><span>FOCUS</span><strong>FULL-STACK</strong></div>
-        <div><span>AI / ML</span><strong>BACKEND</strong></div>
-        <div><span>SYSTEMS</span><strong>PRODUCT</strong></div>
-        <div><span>CURRENTLY</span><strong>BUILDING</strong></div>
+          <ul className="about-hotbar" aria-label="Focus areas">
+            {focus.map((item) => (
+              <li key={item.label}>
+                <ItemSlot className="about-slot">
+                  <PixelIcon name={item.icon} size={36} />
+                </ItemSlot>
+                <span>{item.label}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </section>
   );

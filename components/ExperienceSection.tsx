@@ -1,43 +1,48 @@
+import { textures } from "./mc/textures";
+
+// Newest role on the surface; each step down digs one layer deeper.
 const items = [
   {
-    company: "CHALKSNBOARD",
+    company: "ChalksNBoard",
     role: "Software Developer Intern",
-    period: "Jun 2026 — Sep 2026",
-    text: "Built production CRM workflows, real-time communication flows, AI-assisted operations, and backend services supporting large-scale lead operations.",
+    period: "JUN — SEP 2026",
+    text: "CRM workflows, real-time messaging and AI-assisted ops.",
+    layer: textures.grassSide,
   },
   {
-    company: "POLICY PERSPECTIVE FOUNDATION",
+    company: "Policy Perspective Foundation",
     role: "Full Stack Developer Intern",
-    period: "Apr 2026 — Jul 2026",
-    text: "Modernized internal product architecture and shipped full-stack functionality for a public-interest platform focused on accessibility and delivery.",
+    period: "APR — JUL 2026",
+    text: "Modernised the platform and shipped full-stack features.",
+    layer: textures.dirt,
   },
   {
-    company: "VAULTOFCODE",
+    company: "VaultOfCode",
     role: "Web Development Intern",
     period: "2025",
-    text: "Built responsive web interfaces and product experiences while learning production-focused software engineering practices.",
+    text: "Responsive interfaces and production web practices.",
+    layer: textures.stone,
   },
 ];
 
 export function ExperienceSection() {
   return (
     <section id="experience" className="experience section-stack reveal">
-      <div className="section-header compact">
-        <div className="section-kicker">FROM CODE TO PRODUCTION / 03</div>
-      </div>
+      <div className="section-kicker">EXPERIENCE / 03</div>
 
-      <div className="timeline">
+      <ol className="strata">
         {items.map((item) => (
-          <article className="timeline-item" key={item.company}>
-            <div className="timeline-date">{item.period}</div>
-            <div className="timeline-body">
-              <div className="timeline-company">{item.company}</div>
-              <div className="timeline-role">{item.role}</div>
-              <p>{item.text}</p>
+          <li className="stratum" key={item.company}>
+            <span className="stratum-block" style={{ backgroundImage: item.layer }} aria-hidden="true" />
+            <span className="stratum-date">{item.period}</span>
+            <div className="stratum-who">
+              <h3>{item.company}</h3>
+              <span>{item.role}</span>
             </div>
-          </article>
+            <p>{item.text}</p>
+          </li>
         ))}
-      </div>
+      </ol>
     </section>
   );
 }
